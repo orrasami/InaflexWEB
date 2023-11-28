@@ -1,0 +1,39 @@
+<!-- table_edit.html -->
+{% extends 'administracao/base.html' %}
+{% load custom_tags %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="text-center" style="margin-top: 30px">{% if row %}EDIÇÃO{% else %}NOVO{% endif %} - {{ table_name }}</h1>
+        <form class="form" {% if row %} action="{% url 'table_edit' table_name=table_name pk=pk %}" {% else %} action="{% url 'table_new' table_name=table_name %}" {% endif %} method="post" >
+        <!--<form action="" method="post" >-->
+        {% csrf_token %}
+        {% for column, column_type in column_types.items %}
+            <label class="label-form" for="{{ column }}">{{ column }}:</label>
+            {% if forloop.counter0 == 0 %}
+                <input class="form-control" type="text" name="{{ column }}" value="{% if row %}{{ row|get_value:column|default:'' }}{% else %}{% endif %}" disabled><br />
+                <input class="form-control" type="text" name="{{ column }}" value="{% if row %}{{ row|get_value:column|default:'' }}{% else %}{% endif %}" style="display: None"><br />
+            {% else %}
+                {% if 'varchar' in column_type %}
+                    {% if column == 'senhaUsuario'%}
+                        <input class="form-control" type="password" name="{{ column }}" value="{% if row %}{{ row|get_value:column|default:'' }}{% else %}{% endif %}" ><br />
+                    {% else %}
+                        <input class="form-control" type="text" name="{{ column }}" value="{% if row %}{{ row|get_value:column|default:'' }}{% else %}{% endif %}" ><br />
+                    {% endif %}
+                {% elif 'int' in column_type %}
+                    <input class="form-control" type="text" name="{{ column }}" value="{% if row %}{{ row|get_value:column|default:'' }}{% else %}{% endif %}" ><br />
+                {% elif 'bit' in column_type %}
+                    <input type="checkbox" name="{{ column }}" {% if row %} {% if row|get_value:column|bytes_to_bool %}checked{% endif %} {% endif %} ><br />
+                    <br>
+                {% else %}
+                    <input class="form-control" type="text" name="{{ column }}" value="{% if row %}{{ row|get_value:column|default:'' }}{% else %}{% endif %}" ><br />
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        <input class="btn btn-danger col-12" type="submit" value="Salvar" />
+        </form>
+        <a class="btn btn-secondary col-12" href="{% url 'table_detail' table_name=table_name %}"> Voltar </a>
+    </div>
+<br>
+<br>
+{% endblock %}

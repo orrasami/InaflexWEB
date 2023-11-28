@@ -1,0 +1,26 @@
+{% extends 'administracao/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block content %}
+    <div class="container">
+        <h1 class="text-center" style="margin-top: 30px">TABELAS - ADMINISTRAÇÃO</h1>
+        <br>
+        <div class="table-container col-12">
+            <table class="table table-bordered custom-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for table in tables %}
+                        <tr>
+                            <td><a href="{% url 'table_detail' table_name=table %}">{{ table }}</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endblock %}

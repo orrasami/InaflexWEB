@@ -1,0 +1,25 @@
+{% extends 'inspecao/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block content %}
+    <div class="container">
+        <h1 class="text-center" style="margin-top: 30px">SELECIONAR LOTE</h1>
+        {% bootstrap_messages %}
+        <form action="{% url 'inspecao_lote' %}" method="post" class="form" autocomplete="off">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="lote" class="form-label"># do Lote</label>
+                <input type="text" id="lote" name="lote" class="form-control" placeholder="# do lote">
+            </div>
+            {% buttons %}
+                <br>
+                <button type="submit" class="btn btn-primary col-12">EDITAR</button>
+            {% endbuttons %}
+        </form>
+        <hr>
+        <br>
+        <a href="{% url 'inspecao_novo_lote' %}" class="btn btn-secondary col-12">NOVO</a>
+
+    </div>
+    {% endblock %}

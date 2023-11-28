@@ -1,0 +1,26 @@
+{% extends 'inspecao/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block content %}
+    <div class="container">
+        <h1 class="text-center" style="margin-top: 30px">Selecionar Aplicativo</h1>
+        {% bootstrap_messages %}
+        <br>
+        <div class="mb-3">
+            <a href="{% url 'home_inspecao' %}" class="btn btn-secondary col-12">Inspeção</a>
+        </div>
+        <br>
+        <div class="mb-3">
+            <a href="{% url 'home_recebimento' %}" class="btn btn-secondary col-12">Recebimento</a>
+        </div>
+        <br>
+        <div class="mb-3">
+            <a href="{% url 'home_liberacao_pedidos' %}" class="btn btn-secondary col-12">Liberação de Pedidos</a>
+        </div>
+        <br>
+        <div class="mb-3">
+            <a href="{% url 'home_administracao' %}" class="btn btn-secondary col-12">Administração</a>
+        </div>
+    </div>
+{% endblock %}

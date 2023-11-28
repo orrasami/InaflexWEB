@@ -1,0 +1,952 @@
+{% extends 'inspecao/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block content %}
+    <div class="container">
+        <h1 class="text-center" style="margin-top: 30px">CHECKLIST</h1>
+        <div class="lote-aberto-ou-fechado-para-edicao">
+            {% if finalizado == "0" %}
+                <div class="alert alert-success text-center" role="alert">
+                    ABERTO
+                </div>
+            {% elif finalizado == "1" %}
+                <div class="alert alert-danger text-center" role="alert">
+                    FINALIZADO
+                </div>
+            {% endif %}
+        </div>
+        <form action="{% url 'inspecao_salvar_lote' %}" method="post" class="form" autocomplete="off" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="pedido" style="background-color: #dfdfe0">
+                <br>
+                <label class="col-12">Pedido: {{ pedido }}</label>
+                <input type="hidden" name="pedido" value="{{ pedido }}">
+                <label class="col-12">Cliente: {{ cliente }}</label>
+                <input type="hidden" name="cliente" value="{{ cliente }}">
+                <label class="col-12">CNPJ: {{ cnpj }}</label>
+                <input type="hidden" name="cnpj" value="{{ cnpj }}">
+                <label class="col-12" style="color: red">Exigencias: {% if exigencias == '' %}Sem exigências{% else %}{{ exigencias }}{% endif %}</label>
+                <input type="hidden" name="exigencias" value="{% if exigencias == '' %}Sem exigências{% else %}{{ exigencias }}{% endif %}">
+                <br>
+            </div>
+            <br>
+            {% bootstrap_messages %}
+            <br>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="lote" class="form-label">Lote</label>
+                    <input type="text" id="lote" name="lote" class="form-control" placeholder="# do lote" value="{{ lote }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="h_inicial" class="form-label">Hora inicial:</label>
+                    <input type="text" id="h_inicial" name="h_inicial" class="form-control" value="{{ h_inicial }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="h_final" class="form-label">Hora final:</label>
+                    <input type="text" id="h_final" name="h_final" class="form-control" value="{{ h_final }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="data" class="form-label">Data:</label>
+                    <input type="text" id="data" name="data" class="form-control" value="{{ data }}">
+                </div>
+            </div>
+            <hr>
+            <h3 class="text-center">EMPATACAO</h3>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+                <div class="form-check form-check-inline col-lg-12 col-12" style="margin-bottom: 25px">
+                  <input class="form-check-input" type="radio" name="empatacao" id="empatacao1" value="1" {% if empatacao == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="empatacao1">Sem guarnicao</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-12 col-12" style="margin-bottom: 25px">
+                  <input class="form-check-input" type="radio" name="empatacao" id="empatacao2" value="2" {% if empatacao == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="empatacao2">Com guarnicao</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-12 col-12">
+                  <input class="form-check-input" type="radio" name="empatacao" id="empatacao3" value="3" {% if empatacao == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="empatacao3">N/A</label>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>O encaixe dos terminais estao conformes (desalinhados)?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="encaixe" id="encaixe1" value="1" {% if encaixe == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="encaixe1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="encaixe" id="encaixe2" value="2" {% if encaixe == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="encaixe2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="encaixe" id="encaixe3" value="3" {% if encaixe == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="encaixe3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                    <input class="form-check-input" type="radio" name="encaixe" id="encaixe4" value="4" {% if encaixe == '4' %}checked{% endif %}>
+                    <label class="form-check-label" for="encaixe4">Cond.</label>
+                </div>
+                <div id="textarea-container-encaixe" {% if encaixe != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                    <textarea class="form-control" name="encaixe_obs" placeholder="Obs:">{{ encaixe_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>O mangote apresenta pontos de solda?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="solda" id="solda1" value="1" {% if solda == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="solda1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="solda" id="solda2" value="2" {% if solda == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="solda2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="solda" id="solda3" value="3" {% if solda == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="solda3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="solda" id="solda4" value="4" {% if solda == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="solda4">Cond.</label>
+                </div>
+                <div id="textarea-container-solda" {% if solda != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="solda_obs" placeholder="Obs:">{{ solda_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>O mangote apresenta postas de cordoalha?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="cordoalha" id="cordoalha1" value="1" {% if cordoalha == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="cordoalha1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="cordoalha" id="cordoalha2" value="2" {% if cordoalha == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="cordoalha2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="cordoalha" id="cordoalha3" value="3" {% if cordoalha == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="cordoalha3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="cordoalha" id="cordoalha4" value="4" {% if cordoalha == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="cordoalha4">Cond.</label>
+                </div>
+                <div id="textarea-container-cordoalha" {% if cordoalha != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="cordoalha_obs" placeholder="Obs:">{{ cordoalha_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>O modelo foi tipado conforme ordem de producao?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="tipado" id="tipado1" value="1" {% if tipado == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="tipado1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="tipado" id="tipado2" value="2" {% if tipado == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="tipado2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="tipado" id="tipado3" value="3" {% if tipado == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="tipado3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="tipado" id="tipado4" value="4" {% if tipado == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="tipado4">Cond.</label>
+                </div>
+                <div id="textarea-container-tipado" {% if tipado != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="tipado_obs" placeholder="Obs:">{{ tipado_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM PLUS-->
+            <div class="radio-group">
+            <hr>
+                <h5>O modelo foi tipado com o numero da tag?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="tag" id="tag1" value="1" {% if tag == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="tag1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="tag" id="tag2" value="2" {% if tag == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="tag2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="tag" id="tag3" value="3" {% if tag == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="tag3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="tag" id="tag4" value="4" {% if tag == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="tag4">Cond.</label>
+                </div>
+                <div id="textarea-container-tag" {% if tag != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="tag_obs" placeholder="Obs:">{{ tag_obs }}</textarea>
+                </div>
+                <div class="label+input">
+                    <br>
+                    <div class="mb-3">
+                        <label for="tag_num" class="form-label">Informar numero da TAG:</label>
+                        <input type="text" id="tag_num" name="tag_num" class="form-control" value="{{ tag_num }}">
+                    </div>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>O mangote apresenta excesso de cola?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="cola" id="cola1" value="1" {% if cola == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="cola1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="cola" id="cola2" value="2" {% if cola == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="cola2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="cola" id="cola3" value="3" {% if cola == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="cola3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="cola" id="cola4" value="4" {% if cola == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="cola4">Cond.</label>
+                </div>
+                <div id="textarea-container-cola" {% if cola != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="cola_obs" placeholder="Obs:">{{ cola_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>Sera aplicado PEAD?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="pead" id="pead1" value="1" {% if pead == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="pead1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="pead" id="pead2" value="2" {% if pead == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="pead2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="pead" id="pead3" value="3" {% if pead == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="pead3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="pead" id="pead4" value="4" {% if pead == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="pead4">Cond.</label>
+                </div>
+                <div id="textarea-container-pead" {% if pead != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="pead_obs" placeholder="Obs:">{{ pead_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM PLUS-->
+            <div class="radio-group">
+            <hr>
+                <h5>Sera aplicado encordoamento?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="corda" id="corda1" value="1" {% if corda == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="corda1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="corda" id="corda2" value="2" {% if corda == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="corda2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="corda" id="corda3" value="3" {% if corda == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="corda3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="corda" id="corda4" value="4" {% if corda == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="corda4">Cond.</label>
+                </div>
+                <div id="textarea-container-corda" {% if corda != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="corda_obs" placeholder="Obs:">{{ corda_obs }}</textarea>
+                </div>
+                <div class="label+input">
+                    <br>
+                    <div class="mb-3">
+                        <label for="corda_num" class="form-label">Informar numero da corda:</label>
+                        <input type="text" id="corda_num" name="corda_cor" class="form-control" value="{{ corda_cor }}">
+                    </div>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>O mangote apresenta excesso de silicone?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="silicone" id="silicone1" value="1" {% if silicone == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="silicone1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="silicone" id="silicone2" value="2" {% if silicone == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="silicone2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="silicone" id="silicone3" value="3" {% if silicone == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="silicone3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="silicone" id="silicone4" value="4" {% if silicone == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="silicone4">Cond.</label>
+                </div>
+                <div id="textarea-container-silicone" {% if silicone != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="silicone_obs" placeholder="Obs:">{{ silicone_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>Tem cupilha?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="cupilha" id="cupilha1" value="1" {% if cupilha == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="cupilha1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="cupilha" id="cupilha2" value="2" {% if cupilha == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="cupilha2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="cupilha" id="cupilha3" value="3" {% if cupilha == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="cupilha3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="cupilha" id="cupilha4" value="4" {% if cupilha == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="cupilha4">Cond.</label>
+                </div>
+                <div id="textarea-container-cupilha" {% if cupilha != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="cupilha_obs" placeholder="Obs:">{{ cupilha_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>O mangote precisa ser drenado?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="drenado" id="drenado1" value="1" {% if drenado == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="drenado1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="drenado" id="drenado2" value="2" {% if drenado == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="drenado2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="drenado" id="drenado3" value="3" {% if drenado == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="drenado3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="drenado" id="drenado4" value="4" {% if drenado == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="drenado4">Cond.</label>
+                </div>
+                <div id="textarea-container-drenado" {% if drenado != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="drenado_obs" placeholder="Obs:">{{ drenado_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>O modelo da plaqueta esta correto?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="plaqueta" id="plaqueta1" value="1" {% if plaqueta == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="plaqueta1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="plaqueta" id="plaqueta2" value="2" {% if plaqueta == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="plaqueta2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="plaqueta" id="plaqueta3" value="3" {% if plaqueta == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="plaqueta3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="plaqueta" id="plaqueta4" value="4" {% if plaqueta == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="plaqueta4">Cond.</label>
+                </div>
+                <div id="textarea-container-plaqueta" {% if plaqueta != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="plaqueta_obs" placeholder="Obs:">{{ plaqueta_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>As informacoes da plaqueta estao conforme aprovado pelo cliente?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="plaqueta_info" id="plaqueta_info1" value="1" {% if plaqueta_info == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="plaqueta_info1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="plaqueta_info" id="plaqueta_info2" value="2" {% if plaqueta_info == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="plaqueta_info2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="plaqueta_info" id="plaqueta_info3" value="3" {% if plaqueta_info == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="plaqueta_info3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="plaqueta_info" id="plaqueta_info4" value="4" {% if plaqueta_info == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="plaqueta_info4">Cond.</label>
+                </div>
+                <div id="textarea-container-plaqueta_info" {% if plaqueta_info != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="plaqueta_info_obs" placeholder="Obs:">{{ plaqueta_info_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>Os parametros do diamentro externo estao conforme aprovado? (Randon/Sem engates)</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="diametro" id="diametro1" value="1" {% if diametro == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="diametro1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="diametro" id="diametro2" value="2" {% if diametro == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="diametro2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="diametro" id="diametro3" value="3" {% if diametro == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="diametro3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="diametro" id="diametro4" value="4" {% if diametro == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="diametro4">Cond.</label>
+                </div>
+                <div id="textarea-container-diametro" {% if diametro != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="diametro_obs" placeholder="Obs:">{{ diametro_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>As etiquetas inseridas nas pontas dos mangotes (Randon), comecam com o digito 2??</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="etiquetas" id="etiquetas1" value="1" {% if etiquetas == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="etiquetas1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="etiquetas" id="etiquetas2" value="2" {% if etiquetas == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="etiquetas2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="etiquetas" id="etiquetas3" value="3" {% if etiquetas == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="etiquetas3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="etiquetas" id="etiquetas4" value="4" {% if etiquetas == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="etiquetas4">Cond.</label>
+                </div>
+                <div id="textarea-container-etiquetas" {% if etiquetas != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="etiquetas_obs" placeholder="Obs:">{{ etiquetas_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>O modelo produzido esta conforme ordem de producao?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="modelo" id="modelo1" value="1" {% if modelo == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="modelo1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="modelo" id="modelo2" value="2" {% if modelo == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="modelo2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="modelo" id="modelo3" value="3" {% if modelo == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="modelo3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="modelo" id="modelo4" value="4" {% if modelo == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="modelo4">Cond.</label>
+                </div>
+                <div id="textarea-container-modelo" {% if modelo != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="modelo_obs" placeholder="Obs:">{{ modelo_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+            <hr>
+                <h5>O mangote precisa ser retrabalhado no acabamento?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="retrabalho" id="retrabalho1" value="1" {% if retrabalho == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="retrabalho1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="retrabalho" id="retrabalho2" value="2" {% if retrabalho == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="retrabalho2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="retrabalho" id="retrabalho3" value="3" {% if retrabalho == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="retrabalho3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="retrabalho" id="retrabalho4" value="4" {% if retrabalho == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="retrabalho4">Cond.</label>
+                </div>
+                <div id="textarea-container-retrabalho" {% if retrabalho != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="retrabalho_obs" placeholder="Obs:">{{ retrabalho_obs }}</textarea>
+                </div>
+            </div>
+            <hr>
+            <h3 class="text-center">ARMAZENAMENTO / EMBALAGEM</h3>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="data_armazenamento" class="form-label">Data do armazenamento:</label>
+                    <input type="text" id="data_armazenamento" name="data_armazenamento" class="form-control" value="{{ data_armazenamento }}">
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+                <h5>A Qualidade foi acionada para analisar a embalagem (caixa)?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="embalagem" id="embalagem1" value="1" {% if embalagem == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="embalagem1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="embalagem" id="embalagem2" value="2" {% if embalagem == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="embalagem2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="embalagem" id="embalagem3" value="3" {% if embalagem == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="embalagem3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="embalagem" id="embalagem4" value="4" {% if embalagem == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="embalagem4">Cond.</label>
+                </div>
+                <div id="textarea-container-embalagem" {% if embalagem != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="embalagem_obs" placeholder="Obs:">{{ embalagem_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+                <br>
+                <h5>A caixa para armazenamento dos mangotes apresenta pregos, etc.?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="pregos" id="pregos1" value="1" {% if pregos == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="pregos1">N/A</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="pregos" id="pregos2" value="2" {% if pregos == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="pregos2">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="pregos" id="pregos3" value="3" {% if pregos == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="pregos3">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="pregos" id="pregos4" value="4" {% if pregos == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="pregos4">Cond.</label>
+                </div>
+                <div id="textarea-container-pregos" {% if pregos != '4' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="pregos_obs" placeholder="Obs:">{{ pregos_obs }}</textarea>
+                </div>
+            </div>
+            <hr>
+
+            <h3 class="text-center">CONSIDERACOES FINAIS</h3>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+                <br>
+                <h5>Foi detectado falha durante a inspecao?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="falha" id="falha1" value="1" {% if falha == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="falha1">Nao</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="falha" id="falha2" value="2" {% if falha == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="falha2">Sim</label>
+                </div>
+                <div id="textarea-container-falha" {% if falha != '2' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="falha_obs" placeholder="Obs:">{{ falha_obs }}</textarea>
+                </div>
+            </div>
+            <!-- RATIO ITEM -->
+            <div class="radio-group">
+                <br>
+                <h5>O responsavel pelo setor foi acionado?</h5>
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="responsavel" id="responsavel1" value="1" {% if responsavel == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="responsavel1">Nao</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="responsavel" id="responsavel2" value="2" {% if responsavel == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="responsavel2">Sim</label>
+                </div>
+                <div id="textarea-container-responsavel" {% if responsavel != '2' %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="responsavel_obs" placeholder="Obs:">{{ responsavel_obs }}</textarea>
+                </div>
+            </div>
+            <hr>
+            <h3 class="text-center">OBSERVACOES DA QUALIDADE</h3>
+            <div id="textarea-container-qualidade_obs">
+                <br>
+                <textarea class="form-control" name="qualidade_obs" placeholder="Obs:">{{ qualidade_obs }}</textarea>
+            </div>
+            <hr>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="inspetor" class="form-label">Nome do Inspetor:</label>
+                    <input type="text" id="inspetor" name="inspetor" class="form-control" value="{{ inspetor }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="data_inspecao" class="form-label">Data da Inspecao:</label>
+                    <input type="text" id="data_inspecao" name="data_inspecao" class="form-control" value="{{ data_inspecao }}">
+                </div>
+            </div>
+            <div class="mensagem_pendencia_pronto_finalizado">
+                {% if finalizado == "1" %}
+                <div class="alert alert-dark text-center" role="alert">
+                    FINALIZADO
+                </div>
+                {% else %}
+                    {% if correto == "SIM" %}
+                    <div class="alert alert-success text-center" role="alert">
+                        PRONTO PARA FINALIZAR
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning text-center" role="alert">
+                        FORMULARIO COM PENDENCIAS
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="submit-button">
+                {% if finalizado == "0" %}
+                {% buttons %}
+                <hr>
+                    <br>
+                    <!--<a href="{% url 'inspecao_salvar_lote' %}" class="btn btn-primary col-12">SALVAR</a>-->
+                    <button type="submit" id="submit" class="btn btn-primary col-12">SALVAR</button>
+                {% endbuttons %}
+                {% endif %}
+            </div>
+        </form>
+        <div class="finalizar-button">
+            {% if correto == "SIM" and finalizado == "0" %}
+            <hr>
+            {% buttons %}
+                <br>
+                <a href="{% url 'inspecao_finalizar' %}" class="btn btn-danger col-12">FINALIZAR</a>
+            {% endbuttons %}
+            {% endif %}
+        </div>
+        <div class="voltar-button">
+            <hr>
+            <br>
+            <a href="{% url 'inspecao_lote' %}" class="btn btn-secondary col-12">VOLTAR</a>
+            <br>
+            <br>
+            <br>
+        </div>
+
+    </div>
+    <script>
+    //RATIO ENCAIXE
+    var encaixeRadios = document.getElementsByName('encaixe');
+    for (var i = 0; i < encaixeRadios.length; i++) {
+        encaixeRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-encaixe');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO solda
+    var soldaRadios = document.getElementsByName('solda');
+    for (var i = 0; i < soldaRadios.length; i++) {
+        soldaRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-solda');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO cordoalha
+    var cordoalhaRadios = document.getElementsByName('cordoalha');
+    for (var i = 0; i < cordoalhaRadios.length; i++) {
+        cordoalhaRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-cordoalha');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO tipado
+    var tipadoRadios = document.getElementsByName('tipado');
+    for (var i = 0; i < tipadoRadios.length; i++) {
+        tipadoRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-tipado');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO tag
+    var tagRadios = document.getElementsByName('tag');
+    for (var i = 0; i < tagRadios.length; i++) {
+        tagRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-tag');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO cola
+    var colaRadios = document.getElementsByName('cola');
+    for (var i = 0; i < colaRadios.length; i++) {
+        colaRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-cola');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO pead
+    var peadRadios = document.getElementsByName('pead');
+    for (var i = 0; i < peadRadios.length; i++) {
+        peadRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-pead');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO corda
+    var cordaRadios = document.getElementsByName('corda');
+    for (var i = 0; i < cordaRadios.length; i++) {
+        cordaRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-corda');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO silicone
+    var siliconeRadios = document.getElementsByName('silicone');
+    for (var i = 0; i < siliconeRadios.length; i++) {
+        siliconeRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-silicone');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO cupilha
+    var cupilhaRadios = document.getElementsByName('cupilha');
+    for (var i = 0; i < cupilhaRadios.length; i++) {
+        cupilhaRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-cupilha');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO drenado
+    var drenadoRadios = document.getElementsByName('drenado');
+    for (var i = 0; i < drenadoRadios.length; i++) {
+        drenadoRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-drenado');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO plaqueta
+    var plaquetaRadios = document.getElementsByName('plaqueta');
+    for (var i = 0; i < plaquetaRadios.length; i++) {
+        plaquetaRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-plaqueta');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO plaqueta_info
+    var plaqueta_infoRadios = document.getElementsByName('plaqueta_info');
+    for (var i = 0; i < plaqueta_infoRadios.length; i++) {
+        plaqueta_infoRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-plaqueta_info');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO diametro
+    var diametroRadios = document.getElementsByName('diametro');
+    for (var i = 0; i < diametroRadios.length; i++) {
+        diametroRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-diametro');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO etiquetas
+    var etiquetasRadios = document.getElementsByName('etiquetas');
+    for (var i = 0; i < etiquetasRadios.length; i++) {
+        etiquetasRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-etiquetas');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO modelo
+    var modeloRadios = document.getElementsByName('modelo');
+    for (var i = 0; i < modeloRadios.length; i++) {
+        modeloRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-modelo');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO retrabalho
+    var retrabalhoRadios = document.getElementsByName('retrabalho');
+    for (var i = 0; i < retrabalhoRadios.length; i++) {
+        retrabalhoRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-retrabalho');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO embalagem
+    var embalagemRadios = document.getElementsByName('embalagem');
+    for (var i = 0; i < embalagemRadios.length; i++) {
+        embalagemRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-embalagem');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO pregos
+    var pregosRadios = document.getElementsByName('pregos');
+    for (var i = 0; i < pregosRadios.length; i++) {
+        pregosRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-pregos');
+            if (this.value >= 3) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO falha
+    var falhaRadios = document.getElementsByName('falha');
+    for (var i = 0; i < falhaRadios.length; i++) {
+        falhaRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-falha');
+            if (this.value == 2) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    //RATIO responsavel
+    var responsavelRadios = document.getElementsByName('responsavel');
+    for (var i = 0; i < responsavelRadios.length; i++) {
+        responsavelRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-responsavel');
+            if (this.value == 2) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    </script>
+{% endblock %}

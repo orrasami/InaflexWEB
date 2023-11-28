@@ -1,0 +1,376 @@
+{% extends 'liberacao_pedidos/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block content %}
+    <div class="container">
+        <h1 class="text-center" style="margin-top: 30px">CHECKLIST DO ORÇAMENTO</h1>
+        <br>
+        <form action="{% url 'liberacao_pedidos_salvar_orcamento' %}" method="post" class="form" autocomplete="off">
+            {% csrf_token %}
+            {% bootstrap_messages %}
+            <div class="pedido" style="background-color: #dfdfe0">
+                <br>
+                <label class="col-12">Orçamento: {{ orcamento }}</label>
+                <input type="hidden" name="orcamento" value="{{ orcamento }}">
+                <br>
+            </div>
+            <br>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="quando" class="form-label">Data:</label>
+                    <input type="text" id="quando" name="quando" class="form-control" placeholder="" value="{{ quando }}">
+                </div>
+            </div>
+            <br>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h2>SOLICITAÇÃO DO CLIENTE X ORÇAMENTO</h2>
+            <hr>
+            <h5>CNPJ - O CNPJ está correto? (CLIENTE VS SISTEMA):</h5>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_01" id="ckl_01_1" value="1" {% if ckl_01 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_01_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_01" id="ckl_01_2" value="2" {% if ckl_01 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_01_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_01" id="ckl_01_3" value="3" {% if ckl_01 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_01_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>VALOR - O valor do orçamento está igual ao do cliente?</h5>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_02" id="ckl_02_1" value="1" {% if ckl_02 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_02_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_02" id="ckl_02_2" value="2" {% if ckl_02 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_02_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_02" id="ckl_02_3" value="3" {% if ckl_02 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_02_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>PRAZO - Prazo de entrega está conforme IT-022?</h5>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_03" id="ckl_03_1" value="1" {% if ckl_03 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_03_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_03" id="ckl_03_2" value="2" {% if ckl_03 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_03_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_03" id="ckl_03_3" value="3" {% if ckl_03 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_03_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>PRAZO - Prazo de entrega atende a solicitação do cliente?</h5>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_04" id="ckl_04_1" value="1" {% if ckl_04 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_04_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_04" id="ckl_04_2" value="2" {% if ckl_04 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_04_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_04" id="ckl_04_3" value="3" {% if ckl_04 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_04_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>FRETE - O tipo de frete está correto? (CLIENTE VS SISTEMA):</h5>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_05" id="ckl_05_1" value="1" {% if ckl_05 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_05_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_05" id="ckl_05_2" value="2" {% if ckl_05 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_05_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_05" id="ckl_05_3" value="3" {% if ckl_05 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_05_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>VALORES - Os valores de IPI estão corretos? (CLIENTE VS SISTEMA):</h5>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_06" id="ckl_06_1" value="1" {% if ckl_06 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_06_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_06" id="ckl_06_2" value="2" {% if ckl_06 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_06_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_06" id="ckl_06_3" value="3" {% if ckl_06 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_06_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>ENDEREÇO - O endereço de entrega e faturamento estão corretos? (CLIENTE VS SISTEMA):</h5>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_07" id="ckl_07_1" value="1" {% if ckl_07 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_07_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_07" id="ckl_07_2" value="2" {% if ckl_07 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_07_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_07" id="ckl_07_3" value="3" {% if ckl_07 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_07_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>ITEM - A descrição dos itens estão corretos? (CLIENTE VS SISTEMA):</h5>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_08" id="ckl_08_1" value="1" {% if ckl_08 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_08_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_08" id="ckl_08_2" value="2" {% if ckl_08 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_08_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_08" id="ckl_08_3" value="3" {% if ckl_08 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_08_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>MATERIAIS - Os materiais que compõem o item está conforme solicitado pelo cliente?</h5>
+            <h6>Tipo de material | Conexções | Tipo de mangueira | Normas | Pressão | Compatibilidade | Contínuo ou Descontínuo | ETC...</h6>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_09" id="ckl_09_1" value="1" {% if ckl_09 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_09_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_09" id="ckl_09_2" value="2" {% if ckl_09 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_09_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_09" id="ckl_09_3" value="3" {% if ckl_09 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_09_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>PROCESSO - O processo que compõe o item está conforme solicitado pelo cliente?</h5>
+            <h7>Drenagem | Uso ou não de banha | ETC...</h7>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_10" id="ckl_10_1" value="1" {% if ckl_10 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_10_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_10" id="ckl_10_2" value="2" {% if ckl_10 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_10_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_10" id="ckl_10_3" value="3" {% if ckl_10 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_10_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>PLANO DE TESTE - O plano de teste está correto?</h5>
+            <h7>Pressão | Norma | ETC...</h7>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_11" id="ckl_11_1" value="1" {% if ckl_11 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_11_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_11" id="ckl_11_2" value="2" {% if ckl_11 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_11_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_11" id="ckl_11_3" value="3" {% if ckl_11 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_11_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>DESVIOS - Há desvios para todas as divergências encontradas?</h5>
+            <h7>Pressão | Norma | ETC...</h7>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_12" id="ckl_12_1" value="1" {% if ckl_12 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_12_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_12" id="ckl_12_2" value="2" {% if ckl_12 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_12_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_12" id="ckl_12_3" value="3" {% if ckl_12 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_12_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>REGISTROS - Todos os arquivos anexados no APP estão corretos?</h5>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_13" id="ckl_13_1" value="1" {% if ckl_13 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_13_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_13" id="ckl_13_2" value="2" {% if ckl_13 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_13_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_13" id="ckl_13_3" value="3" {% if ckl_13 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_13_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <br>
+            <br>
+            <hr>
+            <h2>FORNECEDOR</h2>
+            <hr>
+            <h5>MATERIAIS - Os materiais orçados estão de acordo com o solicitado pelo cliente?</h5>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_14" id="ckl_14_1" value="1" {% if ckl_14 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_14_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_14" id="ckl_14_2" value="2" {% if ckl_14 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_14_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_14" id="ckl_14_3" value="3" {% if ckl_14 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_14_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>VALIDADE DO ORÇAMENTO - Orçamento está na validade?</h5>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_15" id="ckl_15_1" value="1" {% if ckl_15 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_15_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_15" id="ckl_15_2" value="2" {% if ckl_15 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_15_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_15" id="ckl_15_3" value="3" {% if ckl_15 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_15_3">N/A</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>PRAZO - Prazo de entrega do fornecedor atenderá o pedido (IT-022)?</h5>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="ckl_16" id="ckl_16_1" value="1" {% if ckl_16 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_16_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_16" id="ckl_16_2" value="2" {% if ckl_16 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_16_2">NOK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="ckl_16" id="ckl_16_3" value="3" {% if ckl_16 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="ckl_16_3">N/A</label>
+                </div>
+            </div>
+
+            <hr>
+            <br>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="responsavel" class="form-label">Responsável:</label>
+                    <input type="text" id="responsavel" name="responsavel" class="form-control" {% if novo == '0' %} value="{{ responsavel }} {% else %} value="{{ usuario_logado }} {% endif %}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="obs" class="form-label">Notas:</label>
+                    <input type="text" id="obs" name="obs" class="form-control" value="{{ obs }}">
+                </div>
+            </div>
+
+            <div class="submit-button">
+                {% buttons %}
+                    {% if novo != '0' %}
+                    <hr>
+                    <br>
+                        <button type="submit" id="submit" class="btn btn-primary col-12">SALVAR</button>
+                    {% endif %}
+                {% endbuttons %}
+            </div>
+        </form>
+        <div class="voltar-button">
+            <br>
+            <hr>
+            <a href="{% url 'liberacao_pedidos_orcamento' %}" class="btn btn-secondary col-12">VOLTAR</a>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+
+    {% endblock %}

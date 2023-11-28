@@ -1,0 +1,47 @@
+{% extends 'inspecao/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block content %}
+    <div class="container">
+        <h1 class="text-center" style="margin-top: 30px">SELECIONAR PEDIDO</h1>
+        {% bootstrap_messages %}
+        <form action="{% url 'inspecao_novo_lote' %}" method="post" class="form" autocomplete="off">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="pedido" class="form-label">Numero do pedido:</label>
+                <input type="text" id="pedido" name="pedido" class="form-control" value="{{ pedido }}">
+                <br>
+                <label class="col-12">Cliente: {% if cliente %}{{ cliente }}{% else %} ...{% endif %}</label>
+                <input type="hidden" name="cliente" value="{{ cliente }}">
+                <label class="col-12">CNPJ: {% if cliente %}{{ cnpj }}{% else %} ...{% endif %}</label>
+                <input type="hidden" name="cnpj" value="{{ cnpj }}">
+                <label class="col-12">Exigencias: {% if exigencias == '' %}Sem exigências{% else %}{{ exigencias }}{% endif %}</label>
+                <input type="hidden" name="exigencias" value="{% if exigencias == '' %}Sem exigências{% else %}{{ exigencias }}{% endif %}">
+                <br>
+            </div>
+            {% buttons %}
+                <br>
+                <button type="submit" id="submit" class="btn btn-primary col-12">PROCURAR</button>
+            {% endbuttons %}
+        </form>
+        <div class="criar-button">
+            {% if correto == 1 %}
+            <hr>
+            {% buttons %}
+                <br>
+                <a href="{% url 'inspecao_editar' %}" class="btn btn-danger col-12">CRIAR INSPECAO</a>
+            {% endbuttons %}
+            {% endif %}
+        </div>
+        <div class="voltar-button">
+            <hr>
+            <br>
+            <a href="{% url 'inspecao_lote' %}" class="btn btn-secondary col-12">VOLTAR</a>
+            <br>
+            <br>
+            <br>
+        </div>
+
+    </div>
+{% endblock %}

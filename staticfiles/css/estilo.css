@@ -1,0 +1,78 @@
+/* STATICFILES */
+.table-container {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+tbody {
+    height: 200px !important;
+    overflow: scroll;
+    display:block;
+}
+
+.filtro-container {
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.custom-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 10;
+}
+
+.navbar-custom {
+  background-color: #EDEDDC !important;
+}
+
+.navbar-custom-adm {
+  background-color: rgb(0, 0, 255, 0.5) !important;
+}
+
+.navbar-custom-recebimento {
+  background-color: rgb(255, 128, 0, 0.8) !important;
+}
+
+.navbar-custom-liberacao-pedidos {
+  background-color: rgb(200, 8, 200, 0.5) !important;
+}
+
+hr {
+    border-top: 30px solid black;
+}
+
+#logout{
+    border:1px solid #CDC99B;
+    background-color:  #CDC99B;
+    color: white;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-size: 24px;
+}
+
+.form-logout {
+    margin-bottom:  0px;
+}
+
+  @media only screen and (max-width: 991px) { /* VERSÃO MOBILE */
+    .break {
+      display: block;
+    }
+    .btn-logout{
+      width: 100%;
+    }
+    .form-logout {
+        margin-bottom:  10px;
+    }
+  }
+
+  /* hide <br> tag on larger screens */
+  @media only screen and (min-width: 992px) {  /* APENAS VERSÃO NÃO MOBILE */
+    .break {
+      display: none;
+    }
+  }
+

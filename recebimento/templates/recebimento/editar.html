@@ -1,0 +1,682 @@
+{% extends 'recebimento/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block content %}
+    <div class="container">
+        <h1 class="text-center" style="margin-top: 30px">LOTE DE RECEBIMENTO</h1>
+        <br>
+        <form action="{% url 'recebimento_salvar_lote' %}" method="post" class="form" autocomplete="off">
+            {% csrf_token %}
+            <div class="pedido" style="background-color: #dfdfe0">
+                <br>
+                <label class="col-12">Lote: {{ lote }}</label>
+                <input type="hidden" name="lote" value="{{ lote }}">
+                <br>
+            </div>
+            <br>
+            {% bootstrap_messages %}
+            <br>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="fornecedor" class="form-label">Fornecedor:</label>
+                    <input type="text" id="fornecedor" name="fornecedor" class="form-control" placeholder="" value="{{ fornecedor }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="plcq" class="form-label">PL-CQ:</label>
+                    <input type="text" id="plcq" name="plcq" class="form-control" value="{{ plcq }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="quando" class="form-label">Data:</label>
+                    <input type="text" id="quando" name="quando" class="form-control" value="{{ quando }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="nota" class="form-label">Nota:</label>
+                    <input type="text" id="nota" name="nota" class="form-control" value="{{ nota }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="oc" class="form-label">O.C:</label>
+                    <input type="text" id="oc" name="oc" class="form-control" value="{{ oc }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="quantidade" class="form-label">Quantidade:</label>
+                    <input type="text" id="quantidade" name="quantidade" class="form-control" value="{{ quantidade }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="inspecionado" class="form-label">Inspecionado:</label>
+                    <input type="text" id="inspecionado" name="inspecionado" class="form-control" value="{{ inspecionado }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="defeito" class="form-label">Defeito:</label>
+                    <input type="text" id="defeito" name="defeito" class="form-control" value="{{ defeito }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="material" class="form-label">Material:</label>
+                    <input type="text" id="material" name="material" class="form-control" value="{{ material }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="rnc" class="form-label">RNC:</label>
+                    <input type="text" id="rnc" name="rnc" class="form-control" value="{{ rnc }}">
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 01:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_1" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_1" name="med_forma_1" class="form-control" value="{{ med_forma_1 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_1" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_1" name="med_valor_1" class="form-control" value="{{ med_valor_1 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_1" id="med_laudo_1_1" value="1" {% if med_laudo_1 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_1_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_1" id="med_laudo_1_2" value="2" {% if med_laudo_1 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_1_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_1" id="med_laudo_1_3" value="3" {% if med_laudo_1 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_1_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                    <input class="form-check-input" type="radio" name="med_laudo_1" id="med_laudo_1_4" value="4" {% if med_laudo_1 == '4' %}checked{% endif %}>
+                    <label class="form-check-label" for="med_laudo_1_4">Reprov.</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 02:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_2" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_2" name="med_forma_2" class="form-control" value="{{ med_forma_2 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_2" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_2" name="med_valor_2" class="form-control" value="{{ med_valor_2 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_2" id="med_laudo_2_1" value="1" {% if med_laudo_2 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_2_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_2" id="med_laudo_2_2" value="2" {% if med_laudo_2 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_2_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_2" id="med_laudo_2_3" value="3" {% if med_laudo_2 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_2_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                    <input class="form-check-input" type="radio" name="med_laudo_2" id="med_laudo_2_4" value="4" {% if med_laudo_2 == '4' %}checked{% endif %}>
+                    <label class="form-check-label" for="med_laudo_2_4">Reprov.</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 03:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_3" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_3" name="med_forma_3" class="form-control" value="{{ med_forma_3 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_3" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_3" name="med_valor_3" class="form-control" value="{{ med_valor_3 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_3" id="med_laudo_3_1" value="1" {% if med_laudo_3 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_3_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_3" id="med_laudo_3_2" value="2" {% if med_laudo_3 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_3_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_3" id="med_laudo_3_3" value="3" {% if med_laudo_3 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_3_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                    <input class="form-check-input" type="radio" name="med_laudo_3" id="med_laudo_3_4" value="4" {% if med_laudo_3 == '4' %}checked{% endif %}>
+                    <label class="form-check-label" for="med_laudo_3_4">Reprov.</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 04:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_4" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_4" name="med_forma_4" class="form-control" value="{{ med_forma_4 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_4" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_4" name="med_valor_4" class="form-control" value="{{ med_valor_4 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_4" id="med_laudo_4_1" value="1" {% if med_laudo_4 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_4_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_4" id="med_laudo_4_2" value="2" {% if med_laudo_4 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_4_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_4" id="med_laudo_4_3" value="3" {% if med_laudo_4 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_4_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                    <input class="form-check-input" type="radio" name="med_laudo_4" id="med_laudo_4_4" value="4" {% if med_laudo_4 == '4' %}checked{% endif %}>
+                    <label class="form-check-label" for="med_laudo_4_4">Reprov.</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 05:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_5" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_5" name="med_forma_5" class="form-control" value="{{ med_forma_5 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_5" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_5" name="med_valor_5" class="form-control" value="{{ med_valor_5 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_5" id="med_laudo_5_1" value="1" {% if med_laudo_5 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_5_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_5" id="med_laudo_5_2" value="2" {% if med_laudo_5 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_5_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_5" id="med_laudo_5_3" value="3" {% if med_laudo_5 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_5_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                    <input class="form-check-input" type="radio" name="med_laudo_5" id="med_laudo_5_4" value="4" {% if med_laudo_5 == '4' %}checked{% endif %}>
+                    <label class="form-check-label" for="med_laudo_5_4">Reprov.</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 06:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_6" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_6" name="med_forma_6" class="form-control" value="{{ med_forma_6 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_6" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_6" name="med_valor_6" class="form-control" value="{{ med_valor_6 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_6" id="med_laudo_6_1" value="1" {% if med_laudo_6 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_6_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_6" id="med_laudo_6_2" value="2" {% if med_laudo_6 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_6_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_6" id="med_laudo_6_3" value="3" {% if med_laudo_6 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_6_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                <input class="form-check-input" type="radio" name="med_laudo_6" id="med_laudo_6_4" value="4" {% if med_laudo_6 == '4' %}checked{% endif %}>
+                    <label class="form-check-label" for="med_laudo_6_4">Reprov.</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 07:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_7" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_7" name="med_forma_7" class="form-control" value="{{ med_forma_7 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_7" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_7" name="med_valor_7" class="form-control" value="{{ med_valor_7 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_7" id="med_laudo_7_1" value="1" {% if med_laudo_7 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_7_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_7" id="med_laudo_7_2" value="2" {% if med_laudo_7 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_7_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_7" id="med_laudo_7_3" value="3" {% if med_laudo_7 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_7_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                <input class="form-check-input" type="radio" name="med_laudo_7" id="med_laudo_7_4" value="4" {% if med_laudo_7 == '4' %}checked{% endif %}>
+                    <label class="form-check-label" for="med_laudo_7_4">Reprov.</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 08:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_8" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_8" name="med_forma_8" class="form-control" value="{{ med_forma_8 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_8" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_8" name="med_valor_8" class="form-control" value="{{ med_valor_8 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_8" id="med_laudo_8_1" value="1" {% if med_laudo_8 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_8_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_8" id="med_laudo_8_2" value="2" {% if med_laudo_8 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_8_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_8" id="med_laudo_8_3" value="3" {% if med_laudo_8 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_8_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                <input class="form-check-input" type="radio" name="med_laudo_8" id="med_laudo_8_4" value="4" {% if med_laudo_8 == '4' %}checked{% endif %}>
+                    <label class="form-check-label" for="med_laudo_8_4">Reprov.</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 09:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_9" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_9" name="med_forma_9" class="form-control" value="{{ med_forma_9 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_9" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_9" name="med_valor_9" class="form-control" value="{{ med_valor_9 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_9" id="med_laudo_9_1" value="1" {% if med_laudo_9 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_9_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_9" id="med_laudo_9_2" value="2" {% if med_laudo_9 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_9_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_9" id="med_laudo_9_3" value="3" {% if med_laudo_9 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_9_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_9" id="med_laudo_9_4" value="4" {% if med_laudo_9 == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_9_4">Reprov.</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 10:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_10" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_10" name="med_forma_10" class="form-control" value="{{ med_forma_10 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_10" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_10" name="med_valor_10" class="form-control" value="{{ med_valor_10 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_10" id="med_laudo_10_1" value="1" {% if med_laudo_10 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_10_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_10" id="med_laudo_10_2" value="2" {% if med_laudo_10 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_10_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_10" id="med_laudo_10_3" value="3" {% if med_laudo_10 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_10_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_10" id="med_laudo_10_4" value="4" {% if med_laudo_10 == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_10_4">Reprov.</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 11:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_11" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_11" name="med_forma_11" class="form-control" value="{{ med_forma_11 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_11" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_11" name="med_valor_11" class="form-control" value="{{ med_valor_11 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_11" id="med_laudo_11_1" value="1" {% if med_laudo_11 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_11_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_11" id="med_laudo_11_2" value="2" {% if med_laudo_11 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_11_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_11" id="med_laudo_11_3" value="3" {% if med_laudo_11 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_11_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_11" id="med_laudo_11_4" value="4" {% if med_laudo_11 == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_11_4">Reprov.</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 12:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_12" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_12" name="med_forma_12" class="form-control" value="{{ med_forma_12 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_12" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_12" name="med_valor_12" class="form-control" value="{{ med_valor_12 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_12" id="med_laudo_12_1" value="1" {% if med_laudo_12 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_12_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_12" id="med_laudo_12_2" value="2" {% if med_laudo_12 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_12_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_12" id="med_laudo_12_3" value="3" {% if med_laudo_12 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_12_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_12" id="med_laudo_12_4" value="4" {% if med_laudo_12 == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_12_4">Reprov.</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 13:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_13" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_13" name="med_forma_13" class="form-control" value="{{ med_forma_13 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_13" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_13" name="med_valor_13" class="form-control" value="{{ med_valor_13 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_13" id="med_laudo_13_1" value="1" {% if med_laudo_13 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_13_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_13" id="med_laudo_13_2" value="2" {% if med_laudo_13 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_13_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_13" id="med_laudo_13_3" value="3" {% if med_laudo_13 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_13_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_13" id="med_laudo_13_4" value="4" {% if med_laudo_13 == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_13_4">Reprov.</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 14:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_14" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_14" name="med_forma_14" class="form-control" value="{{ med_forma_14 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_14" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_14" name="med_valor_14" class="form-control" value="{{ med_valor_14 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_14" id="med_laudo_14_1" value="1" {% if med_laudo_14 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_14_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_14" id="med_laudo_14_2" value="2" {% if med_laudo_14 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_14_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_14" id="med_laudo_14_3" value="3" {% if med_laudo_14 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_14_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_14" id="med_laudo_14_4" value="4" {% if med_laudo_14 == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_14_4">Reprov.</label>
+                </div>
+            </div>
+
+            <!-- MEDIDAS --> 
+            <hr>
+            <h5>MEDIDA 15:</h5>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_forma_15" class="form-label">Forma de medição:</label>
+                    <input type="text" id="med_forma_15" name="med_forma_15" class="form-control" value="{{ med_forma_15 }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="med_valor_15" class="form-label">Valor:</label>
+                    <input type="text" id="med_valor_15" name="med_valor_15" class="form-control" value="{{ med_valor_15 }}">
+                </div>
+            </div>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_15" id="med_laudo_15_1" value="1" {% if med_laudo_15 == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_15_1">OK</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_15" id="med_laudo_15_2" value="2" {% if med_laudo_15 == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_15_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="med_laudo_15" id="med_laudo_15_3" value="3" {% if med_laudo_15 == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_15_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                  <input class="form-check-input" type="radio" name="med_laudo_15" id="med_laudo_15_4" value="4" {% if med_laudo_15 == '4' %}checked{% endif %}>
+                  <label class="form-check-label" for="med_laudo_15_4">Reprov.</label>
+                </div>
+            </div>
+            <!-- MEDIDAS -->
+            <hr>
+            <h5>LAUDO FINAL:</h5>
+            <div class="radio-group">
+                <br>
+                <div class="form-check form-check-inline col-lg-3 col-2">
+                  <input class="form-check-input" type="radio" name="laudo_final" id="laudo_final_1" value="1" {% if laudo_final == '1' %}checked{% endif %}>
+                  <label class="form-check-label" for="laudo_final_1">Aprov.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="laudo_final" id="laudo_final_2" value="2" {% if laudo_final == '2' %}checked{% endif %}>
+                  <label class="form-check-label" for="laudo_final_2">Retrab.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-3 col-3">
+                  <input class="form-check-input" type="radio" name="laudo_final" id="laudo_final_3" value="3" {% if laudo_final == '3' %}checked{% endif %}>
+                  <label class="form-check-label" for="laudo_final_3">Cond.</label>
+                </div>
+                <div class="form-check form-check-inline col-lg-2 col-2">
+                    <input class="form-check-input" type="radio" name="laudo_final" id="laudo_final_4" value="4" {% if laudo_final == '4' %}checked{% endif %}>
+                    <label class="form-check-label" for="laudo_final_4">Reprov.</label>
+                </div>
+                <div id="textarea-container-laudo" {% if laudo_final == '1' or laudo_final == null %} style="display: none;"{% endif %}>
+                    <br>
+                  <textarea class="form-control" name="obs_laudo" placeholder="Obs:">{{ obs_final }}</textarea>
+            </div>
+
+            <br>
+            <br>
+            <hr>
+
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="liberacao_condicional" class="form-label">Liberação Condicional por:</label>
+                    <input type="text" id="liberacao_condicional" name="liberacao_condicional" class="form-control" value="{{ liberacao_condicional }}">
+                </div>
+            </div>
+            <div class="label+input">
+                <div class="mb-3">
+                    <label for="liberacao" class="form-label">Liberado por:</label>
+                    <input type="text" id="liberacao" name="liberacao" class="form-control" value="{{ liberacao }}">
+                </div>
+            </div>
+
+            <div class="submit-button">
+                {% buttons %}
+                    {% if novo != '0' %}
+                    <hr>
+                    <br>
+                        <button type="submit" id="submit" class="btn btn-primary col-12">SALVAR</button>
+                    {% endif %}
+                {% endbuttons %}
+            </div>
+        </form>
+        <div class="voltar-button">
+            <br>
+            <hr>
+            <a href="{% url 'recebimento_lote' %}" class="btn btn-secondary col-12">VOLTAR</a>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+    <script>
+    //RATIO ENCAIXE
+    var laudoRadios = document.getElementsByName('laudo_final');
+    for (var i = 0; i < laudoRadios.length; i++) {
+        laudoRadios[i].addEventListener('change', function() {
+            var textareaContainer = document.getElementById('textarea-container-laudo');
+            if (this.value >= 2) {
+                textareaContainer.style.display = 'block';
+            } else {
+                textareaContainer.style.display = 'none';
+            }
+        });
+    }
+    </script>
+
+    {% endblock %}

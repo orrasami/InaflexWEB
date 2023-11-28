@@ -1,0 +1,70 @@
+{% extends 'administracao/base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block content %}
+    <div class="container">
+        <h1 class="text-center" style="margin-top: 30px">TABELAS - DETALHES</h1>
+        <br>
+        <div class="filtro-container col-12">
+            <div class="row">
+            {% for x in qtd %}
+                {% with start=x|multiply:500 end=x|add:1|multiply:500 %}
+                <div class="col-lg-2 col-4">
+                    <form href="{% url 'table_detail' table_name=table_name %}" method="post" style="margin: 1px -14px">
+                        {% csrf_token %}
+                        <input class="form-control" name="filtro" value="{{ start }}" style="display: None">
+                        <input class="btn btn-primary col-12" type="submit" value="{{ start }}-{{ end }}">
+                    </form>
+                </div>
+                {% endwith %}
+            {% endfor %}
+            </div>
+        </div>
+        <br>
+        <div class="table-container col-12">
+        <table class="table table-bordered custom-table">
+            <thead>
+                <tr>
+                {% for column in column_types %}
+                    {% if column != 'senhaUsuario'%}
+                        <th>{{ column }}</th>
+                    {% endif %}
+                {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                    {% for column, value in row.items %}  <!--como row.items contem tuplas, essa linha retorna para cada tupla o valor "nome da coluna" para column e o "valor" dela em valor.-->
+                        {% if forloop.counter == 1 %}  <!--uma template TAG que ve qual o contador atual do loop for-->
+                            <td><a href="{% url 'table_edit' table_name=table_name pk=row.id %}">{{ value }}</a></td>
+                        {% else %}
+                            {% if column_types|get_value:column|starts_with:'bit' %}
+                                {% if value|bytes_to_bool == 1 %}
+                                    <td><i class="fa-solid fa-check"></i></td>
+                                {% else %}
+                                    <td><i class="fa-solid fa-xmark"></i></td>
+                                {% endif %}
+                            {% else %}
+                                {% if column != 'senhaUsuario'%}
+                                    <td>{{ value }}</td>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+        <br>
+        <a class="btn btn-primary col-12" href="{% url 'table_new' table_name=table_name %}?create=true">CRIAR NOVO</a>
+        <br>
+        <br>
+        <a class="btn btn-secondary col-12" href="{% url 'table_list' %}"> VOLTAR </a>
+    </div>
+    <br>
+    <br>
+{% endblock %}

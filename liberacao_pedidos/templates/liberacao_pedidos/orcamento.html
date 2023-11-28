@@ -1,0 +1,58 @@
+{% extends 'liberacao_pedidos/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block content %}
+    <div class="container">
+        <h1 class="text-center" style="margin-top: 30px">SELECIONAR ORÇAMENTO</h1>
+        {% bootstrap_messages %}
+        <form action="{% url 'liberacao_pedidos_orcamento' %}" method="post" class="form" autocomplete="off">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="orcamento" class="form-label">Orçamento</label>
+                <input type="text" id="orcamento" name="orcamento" class="form-control" placeholder="# do orcamento">
+            </div>
+            {% buttons %}
+                <br>
+                <button type="submit" class="btn btn-primary col-12">VISUALISAR</button>
+            {% endbuttons %}
+        </form>
+        <hr>
+        <br>
+        <a href="#" class="btn btn-secondary col-12" onclick="submitForm()">NOVO</a>
+
+    </div>
+
+    <!-- FUNÇÃO PARA TRANSFORMAR O BOTÃO QUE NÃO É POST PARA POST METHOD -->
+
+<script>
+    function submitForm() {
+        // Get the value of the "lote" input field
+        var orcamentoValue = document.getElementById('orcamento').value;
+
+        // Create a new form element
+        var form = document.createElement('form');
+        form.method = 'post';
+        form.action = '{% url "liberacao_pedidos_novo_orcamento" %}';
+
+        // Add the CSRF token input field
+        var csrfToken = document.createElement('input');
+        csrfToken.type = 'hidden';
+        csrfToken.name = 'csrfmiddlewaretoken';
+        csrfToken.value = '{{ csrf_token }}';
+        form.appendChild(csrfToken);
+
+        // Add the "orçamento" input value as a hidden input field
+        var orcamentoInput = document.createElement('input');
+        orcamentoInput.type = 'hidden';
+        orcamentoInput.name = 'orcamento';
+        orcamentoInput.value = orcamentoValue;
+        form.appendChild(orcamentoInput);
+
+        // Append the form to the document body and submit it
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+
+    {% endblock %}

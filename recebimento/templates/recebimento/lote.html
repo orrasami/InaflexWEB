@@ -1,0 +1,58 @@
+{% extends 'recebimento/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% block content %}
+    <div class="container">
+        <h1 class="text-center" style="margin-top: 30px">SELECIONAR LOTE</h1>
+        {% bootstrap_messages %}
+        <form action="{% url 'recebimento_lote' %}" method="post" class="form" autocomplete="off">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="lote" class="form-label"># do Lote</label>
+                <input type="text" id="lote" name="lote" class="form-control" placeholder="# do lote">
+            </div>
+            {% buttons %}
+                <br>
+                <button type="submit" class="btn btn-primary col-12">VISUALISAR</button>
+            {% endbuttons %}
+        </form>
+        <hr>
+        <br>
+        <a href="#" class="btn btn-secondary col-12" onclick="submitForm()">NOVO</a>
+
+    </div>
+
+    <!-- FUNÇÃO PARA TRANSFORMAR O BOTÃO QUE NÃO É POST PARA POST METHOD -->
+
+<script>
+    function submitForm() {
+        // Get the value of the "lote" input field
+        var loteValue = document.getElementById('lote').value;
+
+        // Create a new form element
+        var form = document.createElement('form');
+        form.method = 'post';
+        form.action = '{% url "recebimento_novo_lote" %}';
+
+        // Add the CSRF token input field
+        var csrfToken = document.createElement('input');
+        csrfToken.type = 'hidden';
+        csrfToken.name = 'csrfmiddlewaretoken';
+        csrfToken.value = '{{ csrf_token }}';
+        form.appendChild(csrfToken);
+
+        // Add the "lote" input value as a hidden input field
+        var loteInput = document.createElement('input');
+        loteInput.type = 'hidden';
+        loteInput.name = 'lote';
+        loteInput.value = loteValue;
+        form.appendChild(loteInput);
+
+        // Append the form to the document body and submit it
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+
+    {% endblock %}
