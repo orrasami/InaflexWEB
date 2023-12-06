@@ -1,0 +1,1 @@
+web gunicorn inaflex.wsgi:application --log-file -
