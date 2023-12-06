@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-^^l3o)ryn@o92%@#b=$i_33-4(%k(l@jjwpd!gkmol0x$hqn$)
 DEBUG = True
 
 ALLOWED_HOSTS = ['inaflex-app.kinghost.net', 'app-inaflex.kinghost.net', '127.0.0.1',
-                 'https://inaflexweb-rohpvmvq.b4a.run/']
+                 'https://inaflexweb-rohpvmvq.b4a.run/', 'https://inaflex-96410ba7a172.herokuapp.com/']
 
 
 # Application definition
