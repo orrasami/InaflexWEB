@@ -185,11 +185,17 @@ def inspecao_lote(request):
 
 
 def apaga_foto_1(request, lote_num):
+    print("1")
     context = request.session.get('context', None)
+    print("2")
     conexao = BDPedidos().conectar()
+    print("3")
     nome_foto = BDPedidos().pega_nome_foto(conexao, lote_num)
+    print("4")
     BDPedidos().apaga_nome_foto1(conexao, lote_num)
+    print("5")
     BDPedidos().fecha(conexao)
+    print("6")
 
     account_name = 'inaflex'
     connection_string = 'FCF8566/TzEdl2hHvp+2owWDZPVxfyX+MYTFX0ToDe1Nkxvg4TO1eHLp2DU1EcBirNrrW4TOxl3v+' \
