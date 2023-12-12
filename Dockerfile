@@ -3,7 +3,10 @@ WORKDIR /app
 COPY . /app
 
 RUN pip install --upgrade pip
+RUN sudo apt-get install libpq-dev python-dev
+RUN pip install psycopg2
 RUN pip install -r requirements.txt
+
 
 EXPOSE 80
 
