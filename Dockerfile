@@ -2,7 +2,7 @@ FROM python:3.9-slim
 WORKDIR /app
 COPY . /app
 
-docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+RUN sudo apt install libpq-dev
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
